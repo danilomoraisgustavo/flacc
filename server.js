@@ -148,9 +148,10 @@ app.use(express.static(STATIC_ROOT, {
 }));
 
 // SPA fallback
-app.get('*', (req, res) => {
+app.use((req, res) => {
     res.sendFile(path.join(STATIC_ROOT, 'index.html'));
 });
+
 
 // ---------- Start ----------
 app.listen(PORT, () => {
