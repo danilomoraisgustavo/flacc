@@ -1,6 +1,7 @@
-// FLACC — servidor Node.js/Express
-// - Servir site estático
-// - API /api/gallery lista imagens por ano/tipo lendo as pastas
+// FLACC — servidor Node.js/Express (estático em /public + API de galeria)
+//
+// Execução exemplo:
+//   PORT=3000 STATIC_DIR=public GALLERY_BASES="assets,images" node server.js
 
 const path = require('path');
 const fs = require('fs');
@@ -12,10 +13,13 @@ const app = express();
 app.disable('x-powered-by');
 app.use(compression());
 
-// --- Config ---
+// ---------- Config ----------
 const PORT = process.env.PORT || 3000;
-// Bases a varrer (ordem = prioridade). Pode mudar via env: GALLERY_BASES="images,assets"
-const BASE_DIRS = (process.env.GALLERY_BASES || 'images,assets')
+const STATIC_DIR = process.env.STATIC_DIR || 'public';
+const STATIC_ROOT = path.resolve(process.cwd(), STATIC_DIR);
+
+// Bases a varrer (ordem de prioridade). Ajuste via env GALLERY_BASES.
+const BASE_DIRS = (process.env.GALLERY_BASES || 'assets,images')
     .split(',')
     .map(s => s.trim())
     .filter(Boolean);
@@ -23,32 +27,28 @@ const BASE_DIRS = (process.env.GALLERY_BASES || 'images,assets')
 // Extensões permitidas
 const EXT = new Set(['.jpg', '.jpeg', '.png', '.webp', '.gif', '.avif']);
 
-// Tipos conhecidos (mas aceitamos qualquer subpasta como tipo)
-const KNOWN_TYPES = new Set(['abertura', 'palestras', 'oficinas', 'exposicoes', 'apresentacoes', 'cartao', 'diversos']);
+// Tipos conhecidos (apenas para ordenar primeiro no retorno)
+const KNOWN_TYPES = new Set(['Abertura', 'Palestras', 'Oficinas', 'Exposições', 'Apresentações', 'Cartão', 'Diversos']);
 
-// Cache simples em memória (30s)
+// Cache simples (30s)
 let CACHE = { t: 0, data: null };
 const TTL_MS = 30_000;
 
-// Util: comparação "natural" (Imagem2 < Imagem10)
+// Comparação "natural"
 const coll = new Intl.Collator('pt-BR', { numeric: true, sensitivity: 'base' });
 const natSort = arr => arr.sort(coll.compare);
 
-// Sanitize helper
-const isYear = (name) => /^\d{4}$/.test(name);
+// Helpers
+const isYear = name => /^\d{4}$/.test(name);
+const toPublicURL = (base, segments) =>
+    `/${[base, ...segments.map(s => encodeURIComponent(s))].join('/')}`;
 
-// Retorna URL pública para arquivo (ex.: /assets/2019/abertura/Imagem1.jpg)
-function toPublicURL(base, segments) {
-    const enc = segments.map(s => encodeURIComponent(s));
-    return '/' + [base, ...enc].join('/');
-}
-
-// Lê árvore de pastas e monta {year:{type:[urls]}}
+// ---------- Scanner ----------
 async function scanOnce() {
-    const data = {}; // { "2019": { "abertura": ["/assets/2019/abertura/Imagem1.jpg"] } }
+    const data = {}; // { "2019": { "Abertura": ["/assets/2019/Abertura/Imagem1.jpg"], ... } }
 
     for (const base of BASE_DIRS) {
-        const baseAbs = path.resolve(process.cwd(), base);
+        const baseAbs = path.join(STATIC_ROOT, base);
         if (!fs.existsSync(baseAbs)) continue;
 
         const yearDirs = (await fsp.readdir(baseAbs, { withFileTypes: true }))
@@ -58,30 +58,29 @@ async function scanOnce() {
         for (const year of yearDirs) {
             if (!data[year]) data[year] = {};
             const yearAbs = path.join(baseAbs, year);
-
             const entries = await fsp.readdir(yearAbs, { withFileTypes: true });
 
-            // 1) Arquivos soltos diretamente no ano -> "diversos"
-            const looseFiles = entries.filter(d => d.isFile() && EXT.has(path.extname(d.name).toLowerCase()))
+            // Arquivos soltos no /ANO -> "Diversos"
+            const looseFiles = entries
+                .filter(d => d.isFile() && EXT.has(path.extname(d.name).toLowerCase()))
                 .map(d => d.name);
+
             if (looseFiles.length) {
-                const type = 'diversos';
+                const type = 'Diversos';
                 if (!data[year][type]) data[year][type] = [];
                 looseFiles.forEach(file => {
-                    // se já foi adicionado por outra base, não duplica
                     const url = toPublicURL(base, [year, file]);
                     if (!data[year][type].includes(url)) data[year][type].push(url);
                 });
             }
 
-            // 2) Subpastas por tipo
+            // Subpastas por tipo (Abertura, Palestras, Exposições, ...)
             const typeDirs = entries.filter(d => d.isDirectory()).map(d => d.name);
             for (const type of typeDirs) {
                 const typeAbs = path.join(yearAbs, type);
                 const files = (await fsp.readdir(typeAbs, { withFileTypes: true }))
                     .filter(d => d.isFile() && EXT.has(path.extname(d.name).toLowerCase()))
                     .map(d => d.name);
-
                 if (!files.length) continue;
 
                 if (!data[year][type]) data[year][type] = [];
@@ -91,12 +90,12 @@ async function scanOnce() {
                 });
             }
 
-            // ordena listas dentro do ano
+            // Ordena arquivos dentro de cada tipo
             Object.keys(data[year]).forEach(t => natSort(data[year][t]));
         }
     }
 
-    // ordena tipos (prioriza conhecidos) e anos desc
+    // Ordena anos (desc) e tipos (conhecidos primeiro)
     const years = Object.keys(data).sort((a, b) => Number(b) - Number(a));
     const ordered = {};
     for (const y of years) {
@@ -109,7 +108,6 @@ async function scanOnce() {
         ordered[y] = {};
         for (const t of types) ordered[y][t] = data[y][t];
     }
-
     return ordered;
 }
 
@@ -121,15 +119,16 @@ async function scanGallery(force = false) {
     return data;
 }
 
-// --- API ---
+// ---------- API ----------
 app.get('/api/health', (req, res) => res.json({ ok: true, ts: new Date().toISOString() }));
 
 app.get('/api/gallery', async (req, res) => {
     try {
         const force = 'refresh' in req.query;
         const data = await scanGallery(force);
-        res.set('Cache-Control', 'no-cache'); // mantemos o cache interno de 30s
+        res.set('Cache-Control', 'no-cache');
         res.json({
+            staticDir: path.relative(process.cwd(), STATIC_ROOT),
             baseDirs: BASE_DIRS,
             generatedAt: new Date().toISOString(),
             data
@@ -140,22 +139,22 @@ app.get('/api/gallery', async (req, res) => {
     }
 });
 
-// --- Estáticos ---
-// Servimos a raiz do projeto (index.html, css, js, assets, images)
-app.use(express.static(path.resolve(process.cwd()), {
+// ---------- Estáticos ----------
+app.use(express.static(STATIC_ROOT, {
     maxAge: '7d',
-    setHeaders: (res, p) => {
-        if (/\.(html)$/i.test(p)) res.setHeader('Cache-Control', 'no-cache');
+    setHeaders: (res, filePath) => {
+        if (/\.html?$/i.test(filePath)) res.setHeader('Cache-Control', 'no-cache');
     }
 }));
 
-// SPA fallback (opcional): envia index.html para rotas desconhecidas
+// SPA fallback
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(process.cwd(), 'index.html'));
+    res.sendFile(path.join(STATIC_ROOT, 'index.html'));
 });
 
-// --- Start ---
+// ---------- Start ----------
 app.listen(PORT, () => {
-    console.log(`FLACC rodando em http://localhost:${PORT}`);
-    console.log(`Bases da galeria: ${BASE_DIRS.join(', ')}`);
+    console.log(`✔ FLACC rodando em http://localhost:${PORT}`);
+    console.log(`✔ Estáticos: ${STATIC_ROOT}`);
+    console.log(`✔ Bases da galeria: ${BASE_DIRS.join(', ')}`);
 });
