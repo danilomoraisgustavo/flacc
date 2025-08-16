@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FLACC — Festival Literário e Artístico de Canaã dos Carajás</title>
+  <meta name="description"
+    content="Festival anual que promove literatura, arte, educação e cultura em Canaã dos Carajás.">
+  <meta name="robots" content="index,follow">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#0D47A1">
+  <meta property="og:title" content="FLACC — Festival Literário e Artístico de Canaã dos Carajás">
+  <meta property="og:description" content="Um encontro entre literatura, arte, educação e cultura.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/logo-flacc.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Merriweather:wght@700;900&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-flacc.svg">
+
+  <!-- Estilo mínimo para os agrupamentos por ano -->
+  <style>
+    .years {
+      display: grid;
+      gap: 16px
+    }
+
+    details.year {
+      border: 1px solid rgba(13, 71, 161, .12);
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 6px 20px rgba(13, 71, 161, .08)
+    }
+
+    .year__summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .year__summary::-webkit-details-marker {
+      display: none
+    }
+
+    .year__summary h3 {
+      margin: 0
+    }
+
+    .year__summary small {
+      color: var(--ink-600)
+    }
+
+    .year__body {
+      padding: 10px 14px 18px
+    }
+
+    .year__controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0 0
+    }
+
+    .muted {
+      color: var(--ink-600);
+      font-size: .92rem
+    }
+
+    .toolbar--top {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0 18px
+    }
+
+    .toolbar--top .chip[data-action] {
+      background: #fff;
+      border: 1px dashed rgba(13, 71, 161, .35)
+    }
+  </style>
+</head>
+
+<body>
+  <div class="skip"><a href="#sobre">Pular para o conteúdo</a></div>
+
+  <header class="site">
+    <nav class="container nav" aria-label="principal">
+      <a class="nav__brand" href="#" aria-label="Página inicial">
+        <img src="assets/logo-flacc.svg" alt="FLACC — Festival Literário e Artístico de Canaã dos Carajás" height="44"
+          width="220">
+      </a>
+
+      <div class="nav__links" id="menu" data-open="false" hidden>
+        <a href="#sobre">Sobre</a>
+        <a href="#acessibilidade">Acessibilidade</a>
+        <a href="#linha-do-tempo">Linha do Tempo</a>
+        <a href="#premios">Prêmios</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#contato">Contato</a>
+      </div>
+
+      <button id="menu-btn" class="btn btn--alt" aria-expanded="false" aria-controls="menu">Menu</button>
+    </nav>
+  </header>
+
+  <section class="hero" role="banner">
+    <div class="container">
+      <div class="hero__surface">
+        <span class="kicker">20–22 de novembro de 2025</span>
+        <h1>Festival Literário e Artístico de Canaã dos Carajás — <span class="emph">FLACC</span></h1>
+        <p style="font-size:1.1rem; color:var(--ink-600)">
+          Literatura, arte e educação se encontram para fortalecer a identidade local, ampliar horizontes e celebrar
+          nossa cultura.
+        </p>
+        <div class="hero__meta">
+          <span class="badge">📍 Canaã dos Carajás — PA</span>
+          <span class="badge">🎭 Exposições, oficinas, palestras e apresentações</span>
+          <span class="badge">🟦 Paleta azul/arara + branco</span>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:16px">
+          <a href="#contato" class="btn">Quero participar</a>
+          <a href="#programacao" class="btn btn--alt">Ver programação</a>
+        </div>
+      </div>
+
+      <div class="hero__surface card--glow">
+        <p class="kicker">Símbolo</p>
+        <h3>Arara-Azul</h3>
+        <p>Majestosa e vibrante, a Arara-Azul-Grande (Anodorhynchus hyacinthinus) tornou-se a mascote do FLACC por
+          representar nossas raízes e o compromisso com a valorização do conhecimento.</p>
+        <p class="small">Cores: <strong class="emph">azul</strong> (primário) e <strong>branco</strong> (apoio). Detalhe
+          opcional em <strong style="color:#CC9A00">amarelo</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <!-- SOBRE -->
+    <section id="sobre" class="section">
+      <div class="container split">
+        <div>
+          <p class="kicker">Sobre o FLACC</p>
+          <h2>Um espaço de intercâmbio cultural</h2>
+          <p>O Festival Literário e Artístico de Canaã dos Carajás – FLACC é um evento anual que promove o encontro
+            entre literatura, arte, educação e cultura, fortalecendo a identidade local e ampliando horizontes. Desde
+            sua primeira edição, o FLACC tem como propósito incentivar a leitura, a escrita e a produção cultural,
+            valorizando autores, artistas e educadores, além de integrar a comunidade em experiências transformadoras.
+          </p>
+          <p>Sua programação reúne atividades como lançamentos de livros, palestras, oficinas, apresentações artísticas,
+            rodas de conversa, exposições e mostras culturais, com a participação de convidados locais, regionais e
+            nacionais.</p>
+          <p>O FLACC se consolidou como um espaço de intercâmbio cultural, fomentando o diálogo entre diferentes saberes
+            e expressões artísticas, estimulando a reflexão crítica e contribuindo para a formação de leitores e
+            cidadãos mais conscientes e participativos.</p>
+
+          <div class="card" style="margin-top:12px">
+            <p class="kicker">Organização</p>
+            <p>Realizado pela Prefeitura Municipal de Canaã dos Carajás, por meio da Secretaria Municipal de Educação, o
+              festival reúne educadores, artistas, escritores e parceiros culturais num grande esforço coletivo,
+              reafirmando o compromisso institucional com o desenvolvimento cultural e a formação de leitores.</p>
+          </div>
+        </div>
+
+        <aside class="card">
+          <p class="kicker">A Arara-Azul: Símbolo do FLACC</p>
+          <p>Majestosa e vibrante, a Arara-Azul-Grande (Anodorhynchus hyacinthinus) corta os céus de Canaã dos Carajás
+            como um traço vivo de cor e poesia. Desde a primeira edição, ela se tornou a mascote e símbolo do FLACC,
+            representando o orgulho de nossas raízes e o compromisso com a valorização do conhecimento.</p>
+          <p>Ela traduz não só a riqueza natural de Canaã dos Carajás, mas também a transformação e o encantamento
+            proporcionados pela literatura e pela cultura.</p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ACESSIBILIDADE -->
+    <section id="acessibilidade" class="section">
+      <div class="container grid grid--2">
+        <div>
+          <p class="kicker">Acessibilidade e Inclusão</p>
+          <h2>Arte e literatura sem barreiras</h2>
+          <p>O VI FLACC reafirma seu compromisso com uma educação efetivamente inclusiva, em que arte e literatura se
+            fortalecem como ferramentas de transformação social.</p>
+          <p>Além da acessibilidade física, o festival busca criar ambientes que valorizem as diferenças, promovam a
+            participação ativa e celebrem a diversidade. A acessibilidade é tratada como direito fundamental, reunindo
+            recursos adaptados, representatividade e diálogos que ampliam a consciência sobre equidade.</p>
+          <p>No FLACC, todos são convidados a viver a experiência da arte e da literatura em um espaço onde cada voz
+            importa e cada história merece ser contada.</p>
+        </div>
+
+        <div class="card">
+          <h3>Recursos previstos</h3>
+          <ul>
+            <li>Interpretação de Libras em atividades selecionadas</li>
+            <li>Conteúdo digital com contraste adequado e textos alternativos</li>
+            <li>Mapa de acessibilidade aos espaços do evento</li>
+            <li>Vagas reservadas e sinalização tátil quando pertinente</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- LINHA DO TEMPO -->
+    <section id="linha-do-tempo" class="section">
+      <div class="container">
+        <p class="kicker">Linha do Tempo Temática</p>
+        <div class="timeline">
+          <p class="t"><span class="y">2019 – 1ª Edição</span><span class="d"> 🎯 Tema: Um país se faz com homens e
+              livros</span></p>
+          <p class="t"><span class="y">2020</span><span class="d"> 🚫 Edição não realizada devido à pandemia da
+              COVID-19.</span></p>
+          <p class="t"><span class="y">2021 – 2ª Edição</span><span class="d"> 🎯 Tema: Canaã, Meu Lugar: Um olhar
+              através da tecnologia entrelaçada às memórias de um povo</span></p>
+          <p class="t"><span class="y">2022 – 3ª Edição</span><span class="d"> 🎯 Tema: A integração das artes
+              democratizando os saberes</span></p>
+          <p class="t"><span class="y">2023 – 4ª Edição</span><span class="d"> 🎯 Tema: Da Amazônia aos quatro cantos do
+              Brasil: viva nossa identidade cultural</span></p>
+          <p class="t"><span class="y">2024 – 5ª Edição</span><span class="d"> 🎯 Tema: Educação antirracista: “Eu sou
+              porque nós somos” (Ubuntu)</span></p>
+          <p class="t"><span class="y">2025 – 6ª Edição</span><span class="d"> 📅 20 a 22 de novembro · 🎯 Tema: a
+              confirmar</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRÊMIOS -->
+    <section id="premios" class="section">
+      <div class="container">
+        <p class="kicker">Prêmios FLACC</p>
+        <div class="grid grid--3">
+          <div class="card">
+            <h3>🏆 Troféu Arara-Azul — Obra Escrita</h3>
+            <p>Valoriza o autor e sua obra publicada, reconhecendo a qualidade do trabalho editorial e incentivando
+              novos escritores do município.</p>
+          </div>
+          <div class="card">
+            <h3>🎖️ Medalha Grazianne Medina</h3>
+            <p>Homenagem a cidadãos ou instituições canaãenses com impacto sociocultural relevante, celebrando valores e
+              práticas positivas na comunidade.</p>
+          </div>
+          <div class="card">
+            <h3>🎭 Estatueta Mayko Goulart</h3>
+            <p>Reconhecimento a quem transforma paixão em arte — teatro, artes visuais, dança ou música — premiando
+              excelência e originalidade.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- IMPACTO -->
+    <section id="impacto" class="section">
+      <div class="container grid grid--2">
+        <div>
+          <p class="kicker">Impacto e Legado</p>
+          <h2>Encontro, criação e pertencimento</h2>
+          <p>O FLACC movimenta milhares de pessoas a cada edição, integrando estudantes, professores, artistas,
+            escritores e o público em geral. Seu alcance ultrapassa as salas de aula e os espaços culturais,
+            impulsionando o turismo e a economia local e fortalecendo a identidade cultural da região.</p>
+        </div>
+        <div class="card">
+          <h3>Convite</h3>
+          <ul>
+            <li><span class="badge">📍 Canaã dos Carajás – PA</span></li>
+            <li><span class="badge">📆 20 a 22 de novembro de 2025</span></li>
+            <li><span class="badge">📲 Instagram / Facebook</span></li>
+          </ul>
+          <p>Junte-se a nós nesta jornada de letras, cultura e diversidade.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- GALERIA (agrupada por ano; gerada via JS a partir de gallery.json) -->
+    <section id="galeria" class="section">
+      <div class="container">
+        <p class="kicker">Galeria</p>
+        <h2>Imagens das Edições</h2>
+
+        <!-- Filtros por tipo -->
+        <div class="toolbar toolbar--top" role="toolbar" aria-label="Filtros da galeria">
+          <span class="muted">Filtrar por tipo:</span>
+          <button class="chip" data-filter-group="type" data-filter-value="all" aria-pressed="true">Todos</button>
+          <button class="chip" data-filter-group="type" data-filter-value="abertura"
+            aria-pressed="false">Abertura</button>
+          <button class="chip" data-filter-group="type" data-filter-value="palestras"
+            aria-pressed="false">Palestras</button>
+          <button class="chip" data-filter-group="type" data-filter-value="oficinas"
+            aria-pressed="false">Oficinas</button>
+          <button class="chip" data-filter-group="type" data-filter-value="exposicoes"
+            aria-pressed="false">Exposições</button>
+          <button class="chip" data-filter-group="type" data-filter-value="apresentacoes"
+            aria-pressed="false">Apresentações</button>
+
+          <span class="muted" style="margin-left:auto">Exibição:</span>
+          <button class="chip" data-action="expand-all">Expandir tudo</button>
+          <button class="chip" data-action="collapse-all">Recolher tudo</button>
+        </div>
+
+        <div class="years" id="years"></div>
+
+        <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Visualização da imagem">
+          <img id="lightbox-img" src="" alt="Visualização ampliada">
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRAMAÇÃO -->
+    <section id="programacao" class="section cta">
+      <div class="container grid grid--2">
+        <div>
+          <h2>Programação</h2>
+          <p style="color:var(--ink-600)">Lançamentos, palestras, oficinas, apresentações artísticas, rodas de conversa,
+            exposições e mostras culturais, com convidados locais, regionais e nacionais.</p>
+        </div>
+        <div class="card">
+          <p class="kicker">Como publicar</p>
+          <ol>
+            <li>Inclua a agenda detalhada (Google Agenda/CSV) e links para inscrições.</li>
+            <li>Use filtros por tema (<strong>#literatura</strong>, <strong>#arte</strong>, <strong>#educação</strong>).
+            </li>
+            <li>Mantenha linguagem clara e contraste elevado para acessibilidade.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO -->
+    <section id="contato" class="section">
+      <div class="container grid grid--2">
+        <div>
+          <h2>Fale com a organização</h2>
+          <p class="small">Prefeitura Municipal de Canaã dos Carajás · Secretaria Municipal de Educação</p>
+          <p class="small">Inclua aqui seus contatos oficiais ou formulário de inscrição.</p>
+        </div>
+        <form class="card" aria-label="Formulário de interesse"
+          onsubmit="event.preventDefault(); alert('Mensagem enviada! (demonstração)');">
+          <label for="nome">Nome</label>
+          <input id="nome" name="nome" type="text" placeholder="Seu nome"
+            style="padding:.9rem; border:1px solid #cbd5e1; border-radius:10px; width:100%; margin:.25rem 0 1rem 0"
+            required>
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" placeholder="voce@exemplo.com"
+            style="padding:.9rem; border:1px solid #cbd5e1; border-radius:10px; width:100%; margin:.25rem 0 1rem 0"
+            required>
+          <button class="btn" type="submit">Enviar</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p class="small">© FLACC — Festival Literário e Artístico de Canaã dos Carajás. Paleta inspirada na Arara-Azul.
+      </p>
+    </div>
+  </footer>
+
+  <!-- JS (menu, lightbox, filtros, montagem dinâmica da galeria) -->
+  <script>
+    (function () {
+      const $ = (s, x = document) => x.querySelector(s);
+      const $$ = (s, x = document) => x.querySelectorAll(s);
+
+      // ========= Menu =========
+      const menuBtn = $('#menu-btn');
+      const menu = $('#menu');
+      if (menuBtn && menu) {
+        menuBtn.addEventListener('click', () => {
+          const open = menu.getAttribute('data-open') === 'true';
+          menu.setAttribute('data-open', String(!open));
+          menu.hidden = open;
+          menuBtn.setAttribute('aria-expanded', String(!open));
+        });
+      }
+
+      // ========= Lightbox =========
+      const lb = $('#lightbox');
+      function bindLightbox(img) {
+        img.addEventListener('click', () => {
+          $('#lightbox-img').src = img.src;
+          lb.setAttribute('aria-hidden', 'false');
+        });
+      }
+      if (lb) {
+        lb.addEventListener('click', e => { if (e.target === lb) lb.setAttribute('aria-hidden', 'true'); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.setAttribute('aria-hidden', 'true'); });
+      }
+
+      // ========= Filtros =========
+      const state = { type: 'all' };
+      function applyTypeFilter() {
+        $$('#years figure').forEach(fig => {
+          const okType = (state.type === 'all' || fig.dataset.type === state.type);
+          fig.style.display = okType ? '' : 'none';
+        });
+      }
+      $$('.chip[data-filter-group="type"]').forEach(chip => {
+        chip.addEventListener('click', () => {
+          $$('.chip[data-filter-group="type"]').forEach(c => c.setAttribute('aria-pressed', 'false'));
+          chip.setAttribute('aria-pressed', 'true');
+          state.type = chip.dataset.filterValue;
+          applyTypeFilter();
+        });
+      });
+
+      // ========= Expandir / Recolher =========
+      const yearsEl = $('#years');
+      $$('.chip[data-action="expand-all"]').forEach(b => b.addEventListener('click', () => { $$('#years details.year').forEach(d => d.open = true) }));
+      $$('.chip[data-action="collapse-all"]').forEach(b => b.addEventListener('click', () => { $$('#years details.year').forEach(d => d.open = false) }));
+
+      // ========= Montagem dinâmica a partir de gallery.json =========
+      // Estrutura esperada:
+      // { "2019": { "abertura": ["Imagem1.jpg","Imagem2.jpg"], "palestras": ["Imagem6.jpg"] }, ... }
+      fetch('gallery.json')
+        .then(r => r.json())
+        .then(data => {
+          const years = Object.keys(data).sort((a, b) => Number(b) - Number(a)); // mais recente primeiro
+          years.forEach(year => {
+            const types = data[year];
+            // grupo por ano (collapsible)
+            const details = document.createElement('details');
+            details.className = 'year';
+            details.open = (years[0] === year); // abre apenas o mais recente
+
+            const summary = document.createElement('summary');
+            summary.className = 'year__summary';
+            summary.innerHTML = `<h3>${year}</h3><small class="muted">${Object.values(types).reduce((n, arr) => n + arr.length, 0)} fotos</small>`;
+            details.appendChild(summary);
+
+            const body = document.createElement('div');
+            body.className = 'year__body';
+
+            // controles do ano (mini filtros por tipo dentro do ano)
+            const controls = document.createElement('div');
+            controls.className = 'year__controls';
+            controls.innerHTML = `<span class="muted">Tipos neste ano:</span>` +
+              Object.keys(types).map(t => `<span class="badge">${t}</span>`).join(' ');
+            body.appendChild(controls);
+
+            // grade da galeria do ano
+            const grid = document.createElement('div');
+            grid.className = 'gallery';
+            body.appendChild(grid);
+
+            // cria figuras por tipo
+            const spanCycle = [4, 3, 3, 2, 2, 3, 4]; // mosaico agradável
+            let idx = 0;
+
+            Object.entries(types).forEach(([type, files]) => {
+              files.forEach(file => {
+                const fig = document.createElement('figure');
+                const span = spanCycle[idx % spanCycle.length];
+                fig.className = `span-${span}`;
+                fig.dataset.year = year;
+                fig.dataset.type = type;
+
+                const img = document.createElement('img');
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                img.alt = `${type} · ${year}`;
+                // caminho principal em images/, fallback para assets/
+                img.src = `images/${year}/${type}/${file}`;
+                img.onerror = () => { img.onerror = null; img.src = `assets/${year}/${type}/${file}`; };
+
+                const cap = document.createElement('figcaption');
+                cap.textContent = `${year} · ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+
+                fig.appendChild(img);
+                fig.appendChild(cap);
+                grid.appendChild(fig);
+
+                bindLightbox(img);
+                idx++;
+              });
+            });
+
+            details.appendChild(body);
+            yearsEl.appendChild(details);
+          });
+
+          // aplica filtro de tipo após montar
+          applyTypeFilter();
+        })
+        .catch(err => {
+          console.error('Falha ao carregar gallery.json', err);
+          yearsEl.innerHTML = '<p class="small">Não foi possível carregar a galeria. Verifique o arquivo <code>gallery.json</code>.</p>';
+        });
+
+      // ========= Rolagem suave (respeita prefers-reduced-motion) =========
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduced) {
+        $$('a[href^="#"]').forEach(a => {
+          a.addEventListener('click', e => {
+            const id = a.getAttribute('href').slice(1);
+            const el = document.getElementById(id);
+            if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+          });
+        });
+      }
+    })();
+  </script>
+
+  <noscript>
+    <style>
+      #menu {
+        display: flex !important
+      }
+
+      .lightbox {
+        display: none !important
+      }
+    </style>
+  </noscript>
+</body>
+
+</html>

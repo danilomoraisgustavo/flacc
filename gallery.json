@@ -1,0 +1,34 @@
+{
+  "2019": {
+    "abertura": [
+      "Imagem1.jpg",
+      "Imagem2.jpg",
+      "Imagem3.jpg",
+      "Imagem4.jpg",
+      "Imagem5.jpg",
+      "Imagem6.jpg",
+      "Imagem7.jpg"
+    ]
+  },
+  "2021": {
+    "oficinas": ["Imagem7.jpg", "Imagem8.jpg"]
+  },
+  "2022": {
+    "exposicoes": ["Imagem9.jpg", "Imagem10.jpg"]
+  },
+  "2023": {
+    "apresentacoes": ["Imagem15.jpg", "Imagem16.jpg", "Imagem17.jpg"]
+  },
+  "2024": {
+    "abertura": ["Imagem22.jpg"],
+    "palestras": ["Imagem23.jpg"],
+    "exposicoes": ["Imagem24.jpg"],
+    "apresentacoes": ["Imagem25.jpg"]
+  },
+  "2025": {
+    "abertura": ["Imagem28.jpg"],
+    "exposicoes": ["Imagem29.jpg"],
+    "palestras": ["Imagem30.jpg"],
+    "apresentacoes": ["Imagem31.jpg"]
+  }
+}
