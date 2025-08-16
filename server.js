@@ -1,8 +1,3 @@
-// FLACC — servidor Node.js/Express (estático em /public + API de galeria)
-//
-// Execução exemplo:
-//   PORT=3000 STATIC_DIR=public GALLERY_BASES="assets,images" node server.js
-
 const path = require('path');
 const fs = require('fs');
 const fsp = fs.promises;
