@@ -14,8 +14,9 @@
   <!-- Metadados sociais -->
   <meta property="og:title" content="FLACC — Festival Literário e Artístico de Canaã dos Carajás">
   <meta property="og:description" content="Um encontro entre literatura, arte, educação e cultura.">
+  <!-- TODO: substituir por imagem oficial assim que definida -->
+  <meta property="og:image" content="assets/images/og-flacc.jpg">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/images/logo-flacc.svg">
   <meta name="twitter:card" content="summary_large_image">
 
   <!-- Fonts -->
@@ -28,102 +29,40 @@
   <!-- CSS principal -->
   <link rel="stylesheet" href="assets/css/styles.css">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="assets/images/logo-flacc.svg">
+  <!-- Favicon minimalista (letra F em azul) -->
+  <link rel="icon" type="image/svg+xml"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%231E88E5"/><text x="18" y="44" font-family="Merriweather" font-weight="900" font-size="36" fill="white">F</text></svg>'>
 
-  <!-- Estilo mínimo dos agrupamentos (anos) -->
-  <style>
-    .years {
-      display: grid;
-      gap: 16px
+  <!-- Estrutura de dados (SEO) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Event",
+    "name":"FLACC — Festival Literário e Artístico de Canaã dos Carajás",
+    "startDate":"2025-11-20",
+    "endDate":"2025-11-22",
+    "eventStatus":"https://schema.org/EventScheduled",
+    "eventAttendanceMode":"https://schema.org/OfflineEventAttendanceMode",
+    "location":{
+      "@type":"Place",
+      "name":"Espaço de Eventos da Prefeitura (a confirmar)",
+      "address":{
+        "@type":"PostalAddress",
+        "addressLocality":"Canaã dos Carajás",
+        "addressRegion":"PA",
+        "addressCountry":"BR"
+      }
+    },
+    "image":"assets/images/og-flacc.jpg",
+    "description":"Festival anual que integra literatura, arte e educação com participação de autores, artistas e escolas.",
+    "organizer":{
+      "@type":"Organization",
+      "name":"Prefeitura Municipal de Canaã dos Carajás — Secretaria Municipal de Educação (SEMED)",
+      "url":"https://www.canaadoscarajas.pa.gov.br/"
     }
+  }
+  </script>
 
-    details.year {
-      border: 1px solid rgba(13, 71, 161, .12);
-      border-radius: 14px;
-      background: #fff;
-      box-shadow: 0 6px 20px rgba(13, 71, 161, .08)
-    }
-
-    .year__summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 16px 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center
-    }
-
-    .year__summary::-webkit-details-marker {
-      display: none
-    }
-
-    .year__summary h3 {
-      margin: 0
-    }
-
-    .year__summary small {
-      color: var(--ink-600)
-    }
-
-    .year__body {
-      padding: 10px 14px 18px
-    }
-
-    .year__controls {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin: 10px 0 0
-    }
-
-    .muted {
-      color: var(--ink-600);
-      font-size: .92rem
-    }
-
-    .toolbar--top {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-      margin: 10px 0 18px
-    }
-
-    .toolbar--top .chip[data-action] {
-      background: #fff;
-      border: 1px dashed rgba(13, 71, 161, .35)
-    }
-
-    .socials {
-      display: flex;
-      gap: 12px;
-      align-items: center
-    }
-
-    .socials a {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 1px solid rgba(13, 71, 161, .22);
-      background: #fff;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, .05)
-    }
-
-    .socials svg {
-      width: 20px;
-      height: 20px;
-      fill: var(--ink-950)
-    }
-
-    .socials a:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(13, 71, 161, .15)
-    }
-  </style>
 </head>
 
 <body>
@@ -131,21 +70,31 @@
 
   <header class="site">
     <nav class="container nav" aria-label="principal">
-      <a class="nav__brand" href="#" aria-label="Página inicial">
-        <img src="assets/images/logo-flacc.svg" alt="FLACC — Festival Literário e Artístico de Canaã dos Carajás"
-          height="44" width="220">
+      <a class="nav__brand" href="#" aria-label="Página inicial" style="gap:8px">
+        <!-- Marca somente com o nome, sem logotipo gráfico -->
+        <span class="logo" style="
+          font-family:'Merriweather',serif;
+          font-weight:900;
+          letter-spacing:.02em;
+          font-size:1.6rem;
+          line-height:1;
+          color:var(--brand-800);
+        ">FLACC</span>
+      </a>
 
+      <div class="nav__links" id="menu" data-open="false" hidden>
+        <a href="#sobre">Sobre</a>
+        <a href="#acessibilidade">Acessibilidade</a>
+        <a href="#linha-do-tempo">Linha do Tempo</a>
+        <a href="#premios">Prêmios</a>
+        <a href="#cardlivro">Cardlivro</a>
+        <a href="#programacao">Programação</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contato">Contato</a>
+      </div>
 
-        <div class="nav__links" id="menu" data-open="false" hidden>
-          <a href="#sobre">Sobre</a>
-          <a href="#acessibilidade">Acessibilidade</a>
-          <a href="#linha-do-tempo">Linha do Tempo</a>
-          <a href="#premios">Prêmios</a>
-          <a href="#galeria">Galeria</a>
-          <a href="#contato">Contato</a>
-        </div>
-
-        <button id="menu-btn" class="btn btn--alt" aria-expanded="false" aria-controls="menu">Menu</button>
+      <button id="menu-btn" class="btn btn--alt" aria-expanded="false" aria-controls="menu">Menu</button>
     </nav>
   </header>
 
@@ -162,6 +111,7 @@
           <span class="badge">Canaã dos Carajás — PA</span>
           <span class="badge">Exposições · Oficinas · Palestras · Apresentações</span>
           <span class="badge">Paleta azul/arara + branco</span>
+          <span class="badge">Tema 2025: em desenvolvimento</span>
         </div>
         <div style="display:flex; gap:12px; margin-top:16px">
           <a href="#contato" class="btn">Quero participar</a>
@@ -172,7 +122,8 @@
       <div class="hero__surface card--glow">
         <p class="kicker">Símbolo</p>
         <h3>Arara-Azul</h3>
-        <p>Majestosa e vibrante, a Arara-Azul-Grande (Anodorhynchus hyacinthinus) tornou-se a mascote do FLACC por
+        <p>Majestosa e vibrante, a Arara-Azul-Grande (Anodorhynchus hyacinthinus) tornou-se uma referência visual do
+          FLACC por
           representar nossas raízes e o compromisso com a valorização do conhecimento.</p>
         <p class="small">Cores: <strong class="emph">azul</strong> (primário) e <strong>branco</strong> (apoio). Detalhe
           opcional em <strong style="color:#CC9A00">amarelo</strong>.</p>
@@ -181,65 +132,63 @@
   </section>
 
   <main>
-    <!-- SOBRE (conteúdo atualizado) -->
+    <!-- SOBRE -->
     <section id="sobre" class="section">
       <div class="container split">
         <div>
           <p class="kicker">Festival Literário e Artístico de Canaã dos Carajás (FLACC)</p>
           <h2>Sobre o FLACC</h2>
-          <p>O Festival Literário e Artístico de Canaã dos Carajás – FLACC é um evento anual que promove o encontro
-            entre literatura, arte, educação e cultura, fortalecendo a identidade local e ampliando horizontes. Desde
-            sua primeira edição, o FLACC tem como propósito incentivar a leitura, a escrita e a produção cultural,
-            valorizando autores, artistas e educadores, além de integrar a comunidade em experiências transformadoras.
-          </p>
-          <p>Sua programação reúne atividades como lançamentos de livros, palestras, oficinas, apresentações artísticas,
-            rodas de conversa, exposições e mostras culturais, com a participação de convidados locais, regionais e
-            nacionais.</p>
-          <p>O FLACC se consolidou como um espaço de intercâmbio cultural, fomentando o diálogo entre diferentes saberes
-            e expressões artísticas, estimulando a reflexão crítica e contribuindo para a formação de leitores e
-            cidadãos mais conscientes e participativos.</p>
+          <p>O FLACC é um evento anual que promove o encontro entre literatura, arte, educação e cultura, fortalecendo a
+            identidade local e ampliando horizontes. Desde sua primeira edição, o festival incentiva a leitura, a
+            escrita e a
+            produção cultural, valorizando autores, artistas e educadores e integrando a comunidade em experiências
+            transformadoras.</p>
+          <p>A programação contempla lançamentos de livros, palestras, oficinas, rodas de conversa, exposições e
+            apresentações artísticas, com participação de convidados locais, regionais e nacionais. Em 2024, por
+            exemplo, o
+            festival abordou a temática da Educação Antirracista, com atividades no Espaço de Eventos (bairro Ouro
+            Preto) e
+            atrações como o Arraial do Pavulagem, além de bate-papos com autores e artistas visuais. <em>(Registro
+              histórico; o
+              tema de 2025 será divulgado oportunamente.)</em></p>
           <div class="card" style="margin-top:12px">
             <p class="kicker">Organização</p>
-            <p>Realizado pela Prefeitura Municipal de Canaã dos Carajás, por meio da Secretaria Municipal de Educação, o
-              festival reúne educadores, artistas, escritores e parceiros culturais num grande esforço coletivo,
-              reafirmando o compromisso institucional com o desenvolvimento cultural e a formação de leitores.</p>
+            <p>Realização da Prefeitura Municipal de Canaã dos Carajás, por meio da Secretaria Municipal de Educação
+              (SEMED), com apoio de parceiros culturais e educacionais.</p>
+            <p class="small">Última atualização editorial deste site: <strong>16/08/2025</strong>.</p>
           </div>
         </div>
 
         <aside class="card">
-          <p class="kicker">A Arara-Azul: Símbolo do FLACC</p>
-          <p>Majestosa e vibrante, a Arara-Azul-Grande (Anodorhynchus hyacinthinus) corta os céus de Canaã dos Carajás
-            como um traço vivo de cor e poesia. Desde a primeira edição, ela se tornou a mascote e símbolo do FLACC, não
-            apenas por ser uma ave típica da nossa região, mas representando o orgulho de nossas raízes e o compromisso
-            com a valorização do conhecimento.</p>
-          <p>Assim, a Arara-Azul representa não só a riqueza natural de Canaã dos Carajás, mas também a transformação e
-            o encantamento proporcionados pela literatura e pela cultura.</p>
+          <p class="kicker">Por que o FLACC importa</p>
+          <ul>
+            <li>Fortalece a formação de leitores e o protagonismo estudantil.</li>
+            <li>Valoriza a produção artística e literária do município.</li>
+            <li>Movimenta turismo, economia criativa e redes culturais.</li>
+            <li>Integra escolas, famílias, artistas e comunidade em geral.</li>
+          </ul>
         </aside>
       </div>
     </section>
 
-    <!-- ACESSIBILIDADE (conteúdo atualizado) -->
+    <!-- ACESSIBILIDADE -->
     <section id="acessibilidade" class="section">
       <div class="container grid grid--2">
         <div>
           <p class="kicker">Acessibilidade e Inclusão</p>
           <h2>Arte e literatura sem barreiras</h2>
-          <p>O VI Festival Literário e Artístico de Canaã dos Carajás reafirma seu compromisso com uma educação
-            efetivamente inclusiva, na qual arte e literatura se fortalecem como ferramentas de transformação social.
-          </p>
-          <p>Além da acessibilidade física, o festival busca criar ambientes que valorizem as diferenças, promovam a
-            participação ativa e celebrem a diversidade em sua plenitude. A acessibilidade é tratada como um direito
-            fundamental, reunindo recursos adaptados, representatividade e diálogos que ampliam a consciência sobre
-            equidade.</p>
-          <p>No FLACC, todos são convidados a viver a experiência da arte e da literatura sem barreiras, em um espaço
-            onde cada voz importa e cada história merece ser contada.</p>
+          <p>O FLACC reafirma o compromisso com a inclusão e a equidade. A curadoria e a produção buscam remover
+            barreiras,
+            ampliar a participação e garantir informação acessível.</p>
+          <p>Conteúdos digitais e ambientação física seguem diretrizes de contraste, navegação e desenho universal, em
+            diálogo com a comunidade e com os coletivos locais.</p>
         </div>
         <div class="card">
           <h3>Recursos previstos</h3>
           <ul>
             <li>Interpretação de Libras em atividades selecionadas</li>
-            <li>Conteúdo digital com contraste adequado e textos alternativos</li>
-            <li>Mapa de acessibilidade aos espaços do evento</li>
+            <li>Textos alternativos, contraste adequado e navegação por teclado</li>
+            <li>Mapa de acessibilidade do espaço do evento (em breve)</li>
             <li>Vagas reservadas e sinalização tátil quando pertinente</li>
           </ul>
         </div>
@@ -249,23 +198,32 @@
     <!-- LINHA DO TEMPO -->
     <section id="linha-do-tempo" class="section">
       <div class="container">
-        <p class="kicker">Linha do Tempo Temática</p>
+        <p class="kicker">Linha do Tempo</p>
         <div class="timeline">
-          <p class="t"><span class="y">2019 – 1ª Edição</span><span class="d"> 🎯 Tema: Um país se faz com homens e
-              livros</span></p>
-          <p class="t"><span class="y">2020 –</span><span class="d"> 🚫 Edição não realizada devido à pandemia da
-              COVID-19.</span></p>
-          <p class="t"><span class="y">2021 – 2ª Edição</span><span class="d"> 🎯 Tema: Canaã, Meu Lugar: UM OLHAR
-              ATRAVÉS DA TECNOLOGIA ENTRELAÇADA ÀS MEMÓRIAS DE UM POVO</span></p>
-          <p class="t"><span class="y">2022 – 3ª Edição</span><span class="d"> 🎯 Tema: A integração das artes
-              democratizando os saberes</span></p>
-          <p class="t"><span class="y">2023 – 4ª Edição</span><span class="d"> 🎯 Tema: Da Amazônia aos Quatro Cantos do
-              Brasil: Viva Nossa Identidade Cultural</span></p>
-          <p class="t"><span class="y">2024 – 5ª Edição</span><span class="d"> 🎯 Tema: Educação Antirracista: “Eu Sou
-              Porque Nós Somos” (Ubuntu)</span></p>
-          <p class="t"><span class="y">2025 – 6ª Edição</span><span class="d"> 📅 Data: 20 a 22 de novembro · 🎯 Tema:
-              (a confirmar)</span></p>
+          <p class="t"><span class="y">2019 — 1ª edição</span><span class="d"> Abertura com show de Gabriel o Pensador;
+              programação literária e artística durante a semana.</span></p>
+          <p class="t"><span class="y">2020 —</span><span class="d"> Edição não realizada (pandemia).</span></p>
+          <p class="t"><span class="y">2021 — 2ª edição</span><span class="d"> Tema: <strong>Canaã, Meu Lugar</strong>;
+              início do programa <strong>Cardlivro</strong> para incentivo à leitura.</span></p>
+          <p class="t"><span class="y">2022 — 3ª edição</span><span class="d"> Tema: <strong>A integração das artes
+                democratizando o saber</strong>.</span></p>
+          <p class="t"><span class="y">2023 — 4ª edição</span><span class="d"> Tema: <strong>Da Amazônia aos quatro
+                cantos do Brasil: Viva nossa identidade cultural</strong>; estreia do <em>Cine Amazônia</em>.</span></p>
+          <p class="t"><span class="y">2024 — 5ª edição</span><span class="d"> Tema: <strong>Educação Antirracista: “Eu
+                sou porque nós somos” (Ubuntu)</strong>; programação no Espaço de Eventos (Ouro Preto).</span></p>
+          <p class="t"><span class="y">2025 — 6ª edição</span><span class="d"> 20 a 22 de novembro — <strong>tema em
+                desenvolvimento</strong>.</span></p>
         </div>
+        <details class="card" style="margin-top:12px">
+          <summary><strong>Notas e referências da linha do tempo</strong></summary>
+          <ul class="small" style="margin: .6rem 0 0 1rem">
+            <li>2019 — abertura com Gabriel o Pensador (notícias regionais).</li>
+            <li>2021 — “Canaã, Meu Lugar” e Cardlivro (reportagens locais).</li>
+            <li>2022 — tema “A integração das artes democratizando o saber” (Agência Pará).</li>
+            <li>2023 — tema amazônico e Cine Amazônia (imprensa regional).</li>
+            <li>2024 — tema Ubuntu, local e atrações (comunicados oficiais e cobertura jornalística).</li>
+          </ul>
+        </details>
       </div>
     </section>
 
@@ -276,27 +234,49 @@
         <div class="grid grid--3">
           <div class="card">
             <h3>🏆 Troféu Arara-Azul — Obra Escrita</h3>
-            <p>Destinado a valorizar o autor e sua obra publicada, o Troféu Arara-Azul reconhece a qualidade do trabalho
-              de todos os profissionais envolvidos na criação e produção de um livro. Mais do que um prêmio, é uma forma
-              de estimular e incentivar a continuidade do trabalho da escrita, fomentando o surgimento de novos
-              escritores municipais.</p>
+            <p>Reconhece produções literárias de residentes em Canaã dos Carajás, valorizando autor, obra e cadeia de
+              produção do livro. Edital anual com curadoria e conselho.</p>
+            <p class="small">Próximo edital: <strong>em breve</strong>.</p>
           </div>
           <div class="card">
             <h3>🎖️ Medalha Grazianne Medina</h3>
-            <p>Concedida a cidadãos ou instituições canaense que tenham se destacado nos mais diversos âmbitos sociais,
-              com relevância e impacto sociocultural. A medalha homenageia o professor Grazianne Jefferson Medina de
-              Almeida, reconhecendo o compromisso com valores, normas e a disseminação de práticas positivas na
-              comunidade.</p>
+            <p>Homenagem a pessoas e instituições com impacto sociocultural relevante no município.</p>
+            <p class="small">Indicações: <strong>em desenvolvimento</strong>.</p>
           </div>
           <div class="card">
             <h3>🎭 Estatueta Mayko Goulart</h3>
-            <p>Reconhecimento dedicado à sociedade civil canaãense que transforma paixão em arte. A premiação celebra
-              obras excepcionais em teatro, artes visuais, dança ou música, valorizando não só o talento, mas também a
-              dedicação e o processo criativo por trás de cada obra. Para receber esta distinção, as obras devem se
-              destacar pela expressão única e originalidade, revelando domínio técnico em sua área, excelência na
-              execução e um olhar criativo apurado.</p>
+            <p>Distinção a obras e trajetórias nas artes cênicas, visuais, dança e música — com ênfase em originalidade
+              e
+              excelência técnica.</p>
+            <p class="small">Regulamento atualizado: <strong>em desenvolvimento</strong>.</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- CARDLIVRO -->
+    <section id="cardlivro" class="section">
+      <div class="container grid grid--2">
+        <div>
+          <p class="kicker">Política do Livro</p>
+          <h2>Cardlivro — incentivo à leitura</h2>
+          <p>O Cardlivro é um benefício educacional que estimula o acesso a obras literárias por estudantes e
+            profissionais
+            da educação durante o FLACC, fortalecendo o hábito de leitura e a biblioteca pessoal.</p>
+          <ul>
+            <li><strong>Público:</strong> estudantes da rede municipal e profissionais da educação.</li>
+            <li><strong>Objetivo:</strong> ampliar acesso ao livro e formar leitores ao longo da vida.</li>
+            <li><strong>Como funciona:</strong> orientações e calendário de retirada <em>em breve</em>.</li>
+          </ul>
+        </div>
+        <aside class="card">
+          <h3>Perguntas comuns</h3>
+          <ul>
+            <li>Critérios e valores do benefício: <strong>em desenvolvimento</strong>.</li>
+            <li>Editoras e livrarias credenciadas: <strong>em breve</strong>.</li>
+            <li>Prestação de contas e transparência: <strong>em desenvolvimento</strong>.</li>
+          </ul>
+        </aside>
       </div>
     </section>
 
@@ -306,23 +286,20 @@
         <div>
           <p class="kicker">Impacto e Legado</p>
           <h2>Encontro, criação e pertencimento</h2>
-          <p>O FLACC movimenta milhares de pessoas a cada edição, integrando estudantes, professores, artistas,
-            escritores e o público em geral. Seu alcance ultrapassa as salas de aula e os espaços culturais,
-            impulsionando o turismo e a economia local, além de fomentar o fortalecimento da identidade cultural da
-            região.</p>
-          <p>O festival promove oficinas, palestras, lançamentos de livros, exposições e apresentações artísticas,
-            ampliando o acesso à cultura e consolidando Canaã dos Carajás como um polo cultural no sul do Pará.</p>
+          <p>O FLACC integra estudantes, professores, artistas e público em geral, extrapolando o ambiente escolar e
+            fortalecendo a identidade cultural de Canaã dos Carajás e região.</p>
+          <p>Além de fomentar a leitura e a produção artística, o festival estimula a economia local e a circulação de
+            bens culturais.</p>
         </div>
         <div class="card">
           <h3>Convite</h3>
-          <p>Venha celebrar conosco! O FLACC é um espaço de encontro, criação e pertencimento, onde a literatura e a
-            arte transformam realidades e fortalecem laços.</p>
+          <p>Venha celebrar conosco! O FLACC é um espaço de encontro, criação e pertencimento, onde literatura e arte
+            transformam realidades e fortalecem laços.</p>
           <ul>
             <li><span class="badge">Canaã dos Carajás – Pará</span></li>
             <li><span class="badge">20 a 22 de novembro de 2025</span></li>
           </ul>
           <div class="socials" aria-label="Redes sociais">
-            <!-- Substitua pelos links oficiais -->
             <a href="#" aria-label="Instagram" target="_blank" rel="noopener">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path
@@ -367,19 +344,58 @@
     <section id="programacao" class="section cta">
       <div class="container grid grid--2">
         <div>
-          <h2>Programação</h2>
-          <p style="color:var(--ink-600)">Lançamentos, palestras, oficinas, apresentações artísticas, rodas de conversa,
-            exposições e mostras culturais, com convidados locais, regionais e nacionais.</p>
+          <h2>Programação 2025</h2>
+          <p class="small" style="color:var(--ink-600)">Curadoria em andamento. Estrutura prevista: lançamentos,
+            palestras,
+            oficinas, apresentações artísticas, rodas de conversa, exposições e mostras culturais.</p>
+          <ul>
+            <li><strong>Eixos curatoriais:</strong> leitura e escrita; artes integradas; identidades e territórios;
+              escola e comunidade.</li>
+            <li><strong>Espaços temáticos:</strong> Palco principal; Arena de autores; Galeria de artes; Espaço das
+              escolas;
+              Cinema educativo. <em>(em desenvolvimento)</em></li>
+          </ul>
         </div>
         <div class="card">
-          <p class="kicker">Como publicar</p>
+          <p class="kicker">Publicação de agenda</p>
           <ol>
-            <li>Inclua a agenda detalhada (Google Agenda/CSV) e links para inscrições.</li>
-            <li>Use filtros por tema (<strong>#literatura</strong>, <strong>#arte</strong>, <strong>#educação</strong>).
-            </li>
-            <li>Mantenha linguagem clara e contraste elevado para acessibilidade.</li>
+            <li>Importe a agenda detalhada (Google Agenda/CSV) e os links para inscrições.</li>
+            <li>Classifique os eventos por tema (<strong>#literatura</strong>, <strong>#arte</strong>,
+              <strong>#educação</strong>).</li>
+            <li>Garanta linguagem clara, foco em acessibilidade e horários com fuso (BRT).</li>
           </ol>
+          <p class="small">Agenda pública: <strong>em breve</strong>.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="section">
+      <div class="container grid grid--2">
+        <div>
+          <p class="kicker">Perguntas Frequentes</p>
+          <h2>Informações úteis</h2>
+          <details class="card">
+            <summary><strong>Onde será o FLACC 2025?</strong></summary>
+            <p>Espaço de Eventos da Prefeitura (bairro Ouro Preto) — <em>a confirmar</em>.</p>
+          </details>
+          <details class="card">
+            <summary><strong>Haverá Cardlivro em 2025?</strong></summary>
+            <p>Sim, a continuidade está em estudo. Critérios e datas serão divulgados <em>em breve</em>.</p>
+          </details>
+          <details class="card">
+            <summary><strong>Como inscrever um livro/projeto/atração?</strong></summary>
+            <p>Editais e formulários serão publicados nesta página e nos canais oficiais <em>em desenvolvimento</em>.
+            </p>
+          </details>
+        </div>
+        <aside class="card">
+          <h3>Transparência</h3>
+          <ul>
+            <li>Editais e prestações de contas: <strong>em desenvolvimento</strong>.</li>
+            <li>Relatórios de público e impacto: <strong>em breve</strong>.</li>
+          </ul>
+        </aside>
       </div>
     </section>
 
@@ -388,8 +404,8 @@
       <div class="container grid grid--2">
         <div>
           <h2>Fale com a organização</h2>
-          <p class="small">Prefeitura Municipal de Canaã dos Carajás · Secretaria Municipal de Educação</p>
-          <p class="small">Inclua aqui seus contatos oficiais ou formulário de inscrição.</p>
+          <p class="small">Prefeitura Municipal de Canaã dos Carajás · Secretaria Municipal de Educação (SEMED)</p>
+          <p class="small">Canais oficiais e formulário de inscrição serão disponibilizados aqui.</p>
         </div>
         <form class="card" aria-label="Formulário de interesse"
           onsubmit="event.preventDefault(); alert('Mensagem enviada! (demonstração)');">
@@ -402,6 +418,8 @@
             style="padding:.9rem; border:1px solid #cbd5e1; border-radius:10px; width:100%; margin:.25rem 0 1rem 0"
             required>
           <button class="btn" type="submit">Enviar</button>
+          <p class="small" style="margin-top:.6rem">Ao enviar, você autoriza o contato para fins de divulgação do FLACC.
+          </p>
         </form>
       </div>
     </section>
@@ -409,7 +427,9 @@
 
   <footer>
     <div class="container">
-      <p class="small">© FLACC — Festival Literário e Artístico de Canaã dos Carajás. Paleta inspirada na Arara-Azul.
+      <p class="small">© FLACC — Festival Literário e Artístico de Canaã dos Carajás. Paleta inspirada na Arara-Azul. ·
+        Este site é atualizado continuamente — versão 16/08/2025.</p>
+      <p class="small">Realização: Prefeitura Municipal de Canaã dos Carajás · Secretaria Municipal de Educação (SEMED)
       </p>
     </div>
   </footer>
