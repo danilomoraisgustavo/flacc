@@ -68,7 +68,7 @@
 <body>
   <div class="skip"><a href="#sobre">Pular para o conteúdo</a></div>
 
-  <header class="site">
+  <header class="site" style="--barra:url('/assets/barra-flac.png')">
     <nav class="container nav" aria-label="principal">
       <a class="nav__brand" href="#" aria-label="Página inicial" style="gap:8px">
         <!-- Marca somente com o nome, sem logotipo gráfico -->
@@ -323,19 +323,37 @@
         <p class="kicker">Galeria</p>
         <h2>Imagens das Edições</h2>
 
-        <!-- Filtros por tipo (injetados dinamicamente) -->
-        <div class="toolbar toolbar--top" role="toolbar" aria-label="Filtros da galeria">
-          <span class="muted">Filtrar por tipo:</span>
-          <span id="toolbar-types"></span>
-          <span class="muted" style="margin-left:auto">Exibição:</span>
-          <button class="chip" data-action="expand-all">Expandir tudo</button>
-          <button class="chip" data-action="collapse-all">Recolher tudo</button>
-        </div>
+        <!-- Grid de capas por ano (preenchido via JS a partir de /api/gallery) -->
+        <div id="year-grid" class="year-grid" aria-live="polite"></div>
 
-        <div class="years" id="years"></div>
+        <!-- Carrossel (modal) -->
+        <div id="carousel" class="carousel" aria-hidden="true" role="dialog" aria-label="Galeria do ano">
+          <div class="carousel__frame">
+            <button class="carousel__close" aria-label="Fechar">×</button>
 
-        <div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-label="Visualização da imagem">
-          <img id="lightbox-img" src="" alt="Visualização ampliada">
+            <div class="carousel__media">
+              <button class="carousel__nav prev" aria-label="Anterior" title="Anterior">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                </svg>
+              </button>
+
+              <img id="carousel-img" class="carousel__img" src="" alt="Imagem da edição do FLACC">
+
+              <button class="carousel__nav next" aria-label="Próxima" title="Próxima">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41Z" />
+                </svg>
+              </button>
+
+              <div id="carousel-dots" class="carousel__dots" aria-label="Navegação de fotos"></div>
+            </div>
+
+            <div class="carousel__caption">
+              <span id="carousel-title" class="carousel__title"></span>
+              <span id="carousel-count" class="carousel__count"></span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -361,7 +379,8 @@
           <ol>
             <li>Importe a agenda detalhada (Google Agenda/CSV) e os links para inscrições.</li>
             <li>Classifique os eventos por tema (<strong>#literatura</strong>, <strong>#arte</strong>,
-              <strong>#educação</strong>).</li>
+              <strong>#educação</strong>).
+            </li>
             <li>Garanta linguagem clara, foco em acessibilidade e horários com fuso (BRT).</li>
           </ol>
           <p class="small">Agenda pública: <strong>em breve</strong>.</p>
@@ -440,7 +459,7 @@
       const $ = (s, x = document) => x.querySelector(s);
       const $$ = (s, x = document) => x.querySelectorAll(s);
 
-      // Menu
+      /* ===== Navegação (mobile) ===== */
       const menuBtn = $('#menu-btn'), menu = $('#menu');
       if (menuBtn && menu) {
         menuBtn.addEventListener('click', () => {
@@ -451,147 +470,7 @@
         });
       }
 
-      // Lightbox
-      const lb = $('#lightbox');
-      function bindLB(img) {
-        img.addEventListener('click', () => { $('#lightbox-img').src = img.src; lb.setAttribute('aria-hidden', 'false'); });
-      }
-      if (lb) {
-        lb.addEventListener('click', e => { if (e.target === lb) lb.setAttribute('aria-hidden', 'true'); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.setAttribute('aria-hidden', 'true'); });
-      }
-
-      // Util: slug para usar nos datasets (remove acentos e espaços)
-      function slugify(s) {
-        return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, '-');
-      }
-
-      // Expand/Collapse anos
-      $$('.chip[data-action="expand-all"]').forEach(b => b.addEventListener('click', () => { $$('#years details.year').forEach(d => d.open = true) }));
-      $$('.chip[data-action="collapse-all"]').forEach(b => b.addEventListener('click', () => { $$('#years details.year').forEach(d => d.open = false) }));
-
-      const yearsEl = $('#years');
-      const typesToolbar = $('#toolbar-types');
-
-      // Estado do filtro (slug)
-      const state = { type: 'all' };
-      function applyTypeFilter() {
-        $$('#years figure').forEach(fig => {
-          fig.style.display = (state.type === 'all' || fig.dataset.type === state.type) ? '' : 'none';
-        });
-      }
-
-      fetch('/api/gallery')
-        .then(r => r.json())
-        .then(payload => {
-          const data = payload.data || {};
-
-          // Monta anos (acordeões)
-          const years = Object.keys(data).sort((a, b) => Number(b) - Number(a));
-          years.forEach((year, i) => {
-            const types = data[year];
-            const total = Object.values(types).reduce((n, arr) => n + arr.length, 0);
-
-            const details = document.createElement('details');
-            details.className = 'year'; details.open = (i === 0);
-            details.innerHTML = `
-            <summary class="year__summary">
-              <h3>${year}</h3>
-              <small class="muted">${total} foto(s)</small>
-            </summary>
-            <div class="year__body">
-              <div class="year__controls">
-                <span class="muted">Tipos neste ano:</span>
-                ${Object.keys(types).map(t => `<span class="badge">${t}</span>`).join(' ')}
-              </div>
-              <div class="gallery"></div>
-            </div>
-          `;
-            const grid = details.querySelector('.gallery');
-            const spanCycle = [4, 3, 3, 2, 2, 3, 4];
-            let idx = 0;
-
-            Object.entries(types).forEach(([typeLabel, urls]) => {
-              const typeSlug = slugify(typeLabel);
-              urls.forEach(url => {
-                const fig = document.createElement('figure');
-                fig.className = `span-${spanCycle[idx % spanCycle.length]}`;
-                fig.dataset.year = year;
-                fig.dataset.type = typeSlug;
-
-                const img = document.createElement('img');
-                img.loading = 'lazy';
-                img.decoding = 'async';
-                img.alt = `${typeLabel} · ${year}`;
-                img.src = url;
-
-                const cap = document.createElement('figcaption');
-                cap.textContent = `${year} · ${typeLabel}`;
-
-                fig.appendChild(img);
-                fig.appendChild(cap);
-                grid.appendChild(fig);
-                bindLB(img);
-                idx++;
-              });
-            });
-
-            yearsEl.appendChild(details);
-          });
-
-          // Monta os chips de tipos dinamicamente (com acentos)
-          const allTypes = new Set();
-          Object.values(data).forEach(typesObj => {
-            Object.keys(typesObj).forEach(t => allTypes.add(t));
-          });
-
-          const orderPref = ['Abertura', 'Palestras', 'Oficinas', 'Exposições', 'Apresentações', 'Cartão', 'Diversos'];
-          const sortedTypes = [...allTypes].sort((a, b) => {
-            const ai = orderPref.indexOf(a), bi = orderPref.indexOf(b);
-            if (ai !== -1 && bi !== -1) return ai - bi;
-            if (ai !== -1) return -1;
-            if (bi !== -1) return 1;
-            return a.localeCompare(b, 'pt-BR');
-          });
-
-          // Botão "Todos"
-          const btnAll = document.createElement('button');
-          btnAll.className = 'chip';
-          btnAll.dataset.filterGroup = 'type';
-          btnAll.dataset.filterValue = 'all';
-          btnAll.setAttribute('aria-pressed', 'true');
-          btnAll.textContent = 'Todos';
-          typesToolbar.appendChild(btnAll);
-
-          // Demais tipos
-          sortedTypes.forEach(label => {
-            const btn = document.createElement('button');
-            btn.className = 'chip';
-            btn.dataset.filterGroup = 'type';
-            btn.dataset.filterValue = slugify(label);
-            btn.setAttribute('aria-pressed', 'false');
-            btn.textContent = label;
-            typesToolbar.appendChild(btn);
-          });
-
-          // Bind filtros
-          typesToolbar.querySelectorAll('.chip').forEach(chip => {
-            chip.addEventListener('click', () => {
-              typesToolbar.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', 'false'));
-              chip.setAttribute('aria-pressed', 'true');
-              state.type = chip.dataset.filterValue;
-              applyTypeFilter();
-            });
-          });
-
-          applyTypeFilter();
-        })
-        .catch(err => {
-          console.error(err);
-          yearsEl.innerHTML = '<p class="small">Não foi possível carregar a galeria. Tente recarregar a página.</p>';
-        });
-
-      // Rolagem suave
+      /* ===== Rolagem suave ===== */
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (!reduced) {
         $$('a[href^="#"]').forEach(a => {
@@ -602,8 +481,175 @@
           });
         });
       }
+
+      /* ===== Galeria: Capa por ano + Carrossel ===== */
+      const yearGrid = $('#year-grid');
+      const carousel = $('#carousel');
+      const carouselImg = $('#carousel-img');
+      const carouselTitle = $('#carousel-title');
+      const carouselCount = $('#carousel-count');
+      const dotsWrap = $('#carousel-dots');
+      const btnPrev = $('.carousel__nav.prev');
+      const btnNext = $('.carousel__nav.next');
+      const btnClose = $('.carousel__close');
+      const mediaArea = $('.carousel__media');
+
+      const byYear = new Map();  // year -> [{url, type}]
+      let currentYear = null;
+      let currentIndex = 0;
+
+      function openCarousel(year, index = 0) {
+        currentYear = year;
+        const items = byYear.get(year) || [];
+        if (!items.length) return;
+
+        currentIndex = Math.min(Math.max(index, 0), items.length - 1);
+        renderSlide();
+
+        // Se só houver 1 imagem, esconde setas e dots
+        const single = items.length === 1;
+        btnPrev.style.display = single ? 'none' : '';
+        btnNext.style.display = single ? 'none' : '';
+        dotsWrap.style.display = single ? 'none' : '';
+
+        carousel.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeCarousel() {
+        carousel.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      function renderSlide() {
+        const items = byYear.get(currentYear) || [];
+        const it = items[currentIndex];
+
+        // ► Se houver só 1 foto, esconda setas e dots
+        const hasMany = items.length > 1;
+        btnPrev.style.display = hasMany ? '' : 'none';
+        btnNext.style.display = hasMany ? '' : 'none';
+        dotsWrap.style.display = hasMany ? '' : 'none';
+
+        // imagem (pré-carrega e faz fade-in)
+        carouselImg.style.opacity = '0';
+        const img = new Image();
+        img.onload = () => {
+          carouselImg.src = it.url;
+          carouselImg.alt = `${currentYear} · ${it.type}`;
+          requestAnimationFrame(() => { carouselImg.style.opacity = '1'; });
+        };
+        img.src = it.url;
+
+        // título e contagem
+        carouselTitle.textContent = `${currentYear} · ${it.type}`;
+        carouselCount.textContent = `${currentIndex + 1} / ${items.length}`;
+
+        // dots
+        dotsWrap.innerHTML = '';
+        items.forEach((_, i) => {
+          const b = document.createElement('button');
+          b.className = 'carousel__dot';
+          b.type = 'button';
+          b.setAttribute('aria-label', `Ir para foto ${i + 1}`);
+          if (i === currentIndex) b.setAttribute('aria-current', 'true');
+          b.addEventListener('click', () => { currentIndex = i; renderSlide(); });
+          dotsWrap.appendChild(b);
+        });
+      }
+
+
+      function nextSlide() {
+        const items = byYear.get(currentYear) || [];
+        if (!items.length) return;
+        currentIndex = (currentIndex + 1) % items.length;
+        renderSlide();
+      }
+      function prevSlide() {
+        const items = byYear.get(currentYear) || [];
+        if (!items.length) return;
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        renderSlide();
+      }
+
+      // Controles
+      btnNext.addEventListener('click', nextSlide);
+      btnPrev.addEventListener('click', prevSlide);
+      btnClose.addEventListener('click', closeCarousel);
+      carousel.addEventListener('click', (e) => { if (e.target === carousel) closeCarousel(); });
+      document.addEventListener('keydown', (e) => {
+        if (carousel.getAttribute('aria-hidden') === 'true') return;
+        if (e.key === 'Escape') closeCarousel();
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+      });
+
+      // Swipe + clique na imagem para avançar
+      (function enableGestures() {
+        let startX = 0, dx = 0, active = false;
+        mediaArea.addEventListener('pointerdown', (e) => { active = true; startX = e.clientX; mediaArea.setPointerCapture(e.pointerId); });
+        mediaArea.addEventListener('pointermove', (e) => { if (!active) return; dx = e.clientX - startX; });
+        mediaArea.addEventListener('pointerup', (e) => {
+          if (!active) return; active = false;
+          if (Math.abs(dx) < 10) nextSlide();  // toque curto: avança
+          else if (dx > 50) prevSlide();
+          else if (dx < -50) nextSlide();
+          dx = 0;
+        });
+      })();
+
+      function buildYearGrid(payload) {
+        const data = payload.data || {};
+        const years = Object.keys(data).sort((a, b) => Number(b) - Number(a));
+
+        years.forEach((year) => {
+          const typesObj = data[year];
+          const items = [];
+          Object.entries(typesObj).forEach(([typeLabel, urls]) => {
+            urls.forEach(url => items.push({ url, type: typeLabel }));
+          });
+          if (!items.length) return;
+          byYear.set(year, items);
+
+          const cover = items[0];
+          const total = items.length;
+
+          const card = document.createElement('button');
+          card.className = 'year-card';
+          card.type = 'button';
+          card.style.backgroundImage = `url('${cover.url}')`;
+          card.setAttribute('aria-label', `Abrir fotos do ano ${year} (${total} imagem(ns))`);
+
+          const inner = document.createElement('div');
+          inner.className = 'year-card__inner';
+          inner.innerHTML = `
+        <div class="year-card__year">${year}</div>
+        <div class="year-card__meta">
+          <span class="year-card__pill">${total} foto(s)</span>
+          <span class="year-card__pill">Ver fotos →</span>
+        </div>`;
+          card.appendChild(inner);
+          card.addEventListener('click', () => openCarousel(year, 0));
+          $('#year-grid').appendChild(card);
+        });
+
+        if (!years.length) {
+          $('#year-grid').innerHTML = '<p class="small">Ainda não há imagens disponíveis. Tente novamente mais tarde.</p>';
+        }
+      }
+
+      fetch('/api/gallery')
+        .then(r => r.json())
+        .then(buildYearGrid)
+        .catch(err => {
+          console.error(err);
+          $('#year-grid').innerHTML = '<p class="small">Não foi possível carregar a galeria. Recarregue a página.</p>';
+        });
+
     })();
   </script>
+
+
 
   <noscript>
     <style>
